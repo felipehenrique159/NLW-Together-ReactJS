@@ -2,6 +2,8 @@ import IllustrationImg from '../../assets/images/illustration.svg'
 import logoImg from '../../assets/images/logo.svg'
 import googleIconImg from '../../assets/images/google-icon.svg'
 import '../../styles/auth.scss'
+import Button from '../../components/Button'
+
 export default function Home(){
     return(
         <div id="page-auth">
@@ -22,10 +24,11 @@ export default function Home(){
                         <input type="text" 
                         placeholder="Digite o código da sala"
                          />
-
-                        <button type="submit" className="btn-submit">
+                
+                        <Button type="submit">
                             Entrar na sala
-                        </button>
+                        </Button>
+
                     </form>
                 </div>
             </main>
