@@ -1,4 +1,3 @@
-import { connected } from 'process'
 import copyImg from '../../assets/images/copy.svg'
 import '../../styles/room-code.scss'
 

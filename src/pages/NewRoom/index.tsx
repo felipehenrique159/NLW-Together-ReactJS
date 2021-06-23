@@ -6,6 +6,7 @@ import { Link,useHistory } from 'react-router-dom'
 import { FormEvent, useState} from 'react'
 import { database } from '../../services/firebase'
 import { useAuth } from '../../hooks/useAuth'
+import toast from 'react-hot-toast'
 
 export default function NewRoom() {
 
@@ -16,17 +17,23 @@ export default function NewRoom() {
     async function handleCreateRoom(e: FormEvent) {
         e.preventDefault()
         if (newRoom.trim() === '') {
-            console.log('vazio');
+            toast.error('Preencher o nome da sala!')
             return
         }
 
-        const result = await database.ref('rooms').push({
-            title:newRoom,
-            authId:user?.id
-        })
+        try {
+            const result = await database.ref('rooms').push({
+                title:newRoom,
+                authId:user?.id
+            })
+    
+            if(result.key){
+                history.push(`/rooms/${result.key}`)
+            }
 
-        if(result.key){
-            history.push(`/rooms/${result.key}`)
+        } catch (error) {
+            console.log(error);
+            
         }
         
 

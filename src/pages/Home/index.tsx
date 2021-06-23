@@ -7,7 +7,8 @@ import { useHistory } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { useState, FormEvent } from 'react'
 import { database } from '../../services/firebase'
-
+// import { toast } from 'react-toastify'
+import {toast} from 'react-hot-toast'
 export default function Home() {
 
     const history = useHistory()
@@ -26,6 +27,7 @@ export default function Home() {
     async function handleJoinRoom(e:FormEvent) {
       e.preventDefault()
       if(roomCode.trim() === ''){
+          toast.error('Preencher Código da sala!')
           return
       }
       
