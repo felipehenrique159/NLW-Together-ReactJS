@@ -5,18 +5,39 @@ import '../../styles/auth.scss'
 import Button from '../../components/Button'
 import { useHistory } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
+import { useState, FormEvent } from 'react'
+import { database } from '../../services/firebase'
 
 export default function Home() {
 
     const history = useHistory()
     const { user, signInWithGoogle } = useAuth()
+    const [roomCode,setRoomCode] = useState('')
+
     async function handleCreateRoom() {
         if (!user) {
             await signInWithGoogle()
             return
         }
 
-        history.push('/roons/new')
+        history.push('/rooms/new')
+    }
+
+    async function handleJoinRoom(e:FormEvent) {
+      e.preventDefault()
+      if(roomCode.trim() === ''){
+          return
+      }
+      
+      const result = await database.ref(`rooms/${roomCode}`).get()
+
+      if(!result.exists()){
+          alert('sala nao existe')
+          return
+      }
+
+      history.push(`/rooms/${roomCode}`)
+
     }
 
     return (
@@ -37,9 +58,11 @@ export default function Home() {
                     <form>
                         <input type="text"
                             placeholder="Digite o código da sala"
+                            onChange={e => setRoomCode(e.target.value)}
+                            value={roomCode}
                         />
 
-                        <Button type="submit">
+                        <Button type="submit" onClick={handleJoinRoom}>
                             Entrar na sala
                         </Button>
 

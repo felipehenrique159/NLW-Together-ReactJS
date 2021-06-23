@@ -2,13 +2,35 @@ import IllustrationImg from '../../assets/images/illustration.svg'
 import logoImg from '../../assets/images/logo.svg'
 import '../../styles/auth.scss'
 import Button from '../../components/Button'
-import {Link} from 'react-router-dom'
-import { useContext } from 'react'
-import { AuthContext } from '../../contexts/AuthContext'
+import { Link,useHistory } from 'react-router-dom'
+import { FormEvent, useState} from 'react'
+import { database } from '../../services/firebase'
+import { useAuth } from '../../hooks/useAuth'
 
 export default function NewRoom() {
 
-    const {user} = useContext(AuthContext)
+    const {user} = useAuth()
+    const [newRoom, setNewRoom] = useState('')
+    const history = useHistory()
+
+    async function handleCreateRoom(e: FormEvent) {
+        e.preventDefault()
+        if (newRoom.trim() === '') {
+            console.log('vazio');
+            return
+        }
+
+        const result = await database.ref('rooms').push({
+            title:newRoom,
+            authId:user?.id
+        })
+
+        if(result.key){
+            history.push(`/rooms/${result.key}`)
+        }
+        
+
+    }
 
     return (
         <div id="page-auth">
@@ -20,11 +42,12 @@ export default function NewRoom() {
             <main>
                 <div className="main-content">
                     <img src={logoImg} alt="Letmeask" />
-                    <h1>{user?.name}</h1>
                     <h2>Criar uma nova sala</h2>
-                    <form>
+                    <form onSubmit={handleCreateRoom}>
                         <input type="text"
                             placeholder="Nome da sala"
+                            onChange={e => setNewRoom(e.target.value)}
+                            value={newRoom}
                         />
 
                         <Button type="submit">
@@ -34,7 +57,7 @@ export default function NewRoom() {
                     </form>
                     <p>
                         Quer entrar em uma sala existente?
-                            <Link to="/">Clique aqui</Link>
+                        <Link to="/">Clique aqui</Link>
                         `
                     </p>
                 </div>

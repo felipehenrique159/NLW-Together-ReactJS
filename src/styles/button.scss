@@ -6,6 +6,7 @@
     cursor: pointer;
     border: 0;
     transition: filter 0.2s;
+    padding: 12px;
 
     &:not(:disabled):hover{
         filter:brightness(0.9)
