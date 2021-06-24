@@ -74,6 +74,7 @@ export default function Home() {
                             placeholder="Digite o código da sala"
                             onChange={e => setRoomCode(e.target.value)}
                             value={roomCode}
+                            maxLength={20}
                         />
 
                         <Button type="submit" onClick={handleJoinRoom}>

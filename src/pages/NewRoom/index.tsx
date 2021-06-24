@@ -59,6 +59,7 @@ export default function NewRoom() {
                             placeholder="Nome da sala"
                             onChange={e => setNewRoom(e.target.value)}
                             value={newRoom}
+                            maxLength={20}
                         />
 
                         <Button type="submit">
@@ -69,7 +70,7 @@ export default function NewRoom() {
                     <p>
                         Quer entrar em uma sala existente?
                         <Link to="/">Clique aqui</Link>
-                        `
+                        
                     </p>
                 </div>
             </main>
