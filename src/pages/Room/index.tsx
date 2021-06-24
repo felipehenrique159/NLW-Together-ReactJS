@@ -10,13 +10,15 @@ import { database } from '../../services/firebase'
 import Question from '../../components/Question'
 import { useRoom } from '../../hooks/useRoom'
 import {Link} from 'react-router-dom'
+import {FiLogOut} from 'react-icons/fi'
+
 type RoomParams = {
     id: string
 }
 
 
 export default function Room() {
-    const { user,signInWithGoogle } = useAuth()
+    const { user,signInWithGoogle,logout } = useAuth()
     const params = useParams<RoomParams>()
     const roomId = params.id
     const [newQuestion, setNewQuestion] = useState('')
@@ -78,7 +80,22 @@ export default function Room() {
 
     async function loginGoogle(e:FormEvent) {
         e.preventDefault()
-        await signInWithGoogle()
+        try {
+            await signInWithGoogle()
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+
+    async function logoutGoogle(e:FormEvent) {
+        e.preventDefault()
+        try {
+            await logout()
+        } catch (error) {
+            console.log(error);
+            
+        }
     }
 
 
@@ -89,7 +106,10 @@ export default function Room() {
                     <Link to="/">
                         <img src={logoImg} alt="Letmeask" />
                     </Link>
-                    <RoomCode code={roomId} />
+                    <div>
+                        {user && <Button onClick={logoutGoogle}>Sair <FiLogOut size={15}/> </Button>}
+                        <RoomCode code={roomId} />
+                    </div>
                 </div>
             </header>
 

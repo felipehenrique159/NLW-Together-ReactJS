@@ -2,15 +2,15 @@ import IllustrationImg from '../../assets/images/illustration.svg'
 import logoImg from '../../assets/images/logo.svg'
 import '../../styles/auth.scss'
 import Button from '../../components/Button'
-import { Link,useHistory } from 'react-router-dom'
-import { FormEvent, useState} from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { FormEvent, useState } from 'react'
 import { database } from '../../services/firebase'
 import { useAuth } from '../../hooks/useAuth'
 import toast from 'react-hot-toast'
 
 export default function NewRoom() {
 
-    const {user} = useAuth()
+    const { user } = useAuth()
     const [newRoom, setNewRoom] = useState('')
     const history = useHistory()
 
@@ -21,21 +21,25 @@ export default function NewRoom() {
             return
         }
 
-        try {
-            const result = await database.ref('rooms').push({
-                title:newRoom,
-                authId:user?.id
-            })
-    
-            if(result.key){
-                history.push(`/rooms/${result.key}`)
-            }
+        if (user) {
+            try {
+                const result = await database.ref('rooms').push({
+                    title: newRoom,
+                    authId: user?.id
+                })
 
-        } catch (error) {
-            console.log(error);
-            
+                if (result.key) {
+                    history.push(`/rooms/${result.key}`)
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
         }
-        
+        else {
+            toast.error('Você precisa fazer login primeiro')
+        }
+
 
     }
 

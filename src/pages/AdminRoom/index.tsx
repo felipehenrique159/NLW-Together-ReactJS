@@ -7,7 +7,10 @@ import deleteImg from '../../assets/images/delete.svg'
 import Question from '../../components/Question'
 import { useRoom } from '../../hooks/useRoom'
 import { database } from '../../services/firebase'
-
+import { useAuth } from '../../hooks/useAuth'
+import {FiLogOut} from 'react-icons/fi'
+import { FormEvent } from 'react'
+import {Link} from 'react-router-dom'
 type RoomParams = {
     id: string
 }
@@ -17,6 +20,17 @@ export default function AdminRoom() {
     const roomId = params.id
     const history = useHistory()
     const { questions, title } = useRoom(roomId)
+    const { user,signInWithGoogle,logout } = useAuth()
+
+    async function logoutGoogle(e:FormEvent) {
+        e.preventDefault()
+        try {
+            await logout()
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
 
     async function handleEndRoom() {
             try {
@@ -47,10 +61,14 @@ export default function AdminRoom() {
         <div id="page-room">
             <header>
                 <div className="content">
-                    <img src={logoImg} alt="Letmeask" />
+                    <Link to="/">
+                     <img src={logoImg} alt="Letmeask" />
+                    </Link>
+                    
                     <div>
+                        {user && <Button onClick={logoutGoogle}>Sair <FiLogOut size={15}/> </Button>}
                         <RoomCode code={roomId} />
-                        <Button isOutlined onClick={handleEndRoom}>Encerrar Sala</Button>
+                        {user && <Button isOutlined onClick={handleEndRoom}>Encerrar Sala</Button> }
                     </div>
                 </div>
             </header>

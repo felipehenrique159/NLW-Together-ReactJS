@@ -4,6 +4,7 @@ import { firebase, auth } from '../services/firebase'
 type AuthContextType = {
     user: User | undefined
     signInWithGoogle: () => Promise<void>
+    logout: () => Promise<void>
 }
 
 type User = {
@@ -47,7 +48,9 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     }, [])
 
     async function signInWithGoogle() {
-        const provider = new firebase.auth.GoogleAuthProvider()
+        const provider = new firebase.auth.GoogleAuthProvider().setCustomParameters({
+            prompt: 'select_account'
+        })
         const res = await auth.signInWithPopup(provider)
     
         if (res.user) {
@@ -66,8 +69,18 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     
     }
 
+    async function logout(){
+        try {
+            await firebase.auth().signOut()
+            setUser(undefined)
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+
     return (
-        <AuthContext.Provider value={{ user, signInWithGoogle }}>
+        <AuthContext.Provider value={{ user, signInWithGoogle, logout }}>
             {props.children}
         </AuthContext.Provider>
     )
