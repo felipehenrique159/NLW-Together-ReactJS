@@ -6,8 +6,8 @@ import { useParams } from 'react-router-dom'
 import { FormEvent, useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { useAuth } from '../../hooks/useAuth'
-import { database, firebase } from '../../services/firebase'
-
+import { database } from '../../services/firebase'
+import Question from '../../components/Question'
 type RoomParams = {
     id: string
 }
@@ -22,7 +22,7 @@ type FirebaseQuestion = Record<string, {
     isAnswered: boolean,
 }>
 
-type Question = {
+type QuestionType = {
     id: string,
     author: {
         name: string,
@@ -38,8 +38,8 @@ export default function Room() {
     const params = useParams<RoomParams>()
     const roomId = params.id
     const [newQuestion, setNewQuestion] = useState('')
-    const [title,setTitle] = useState('')
-    const [questions, setQuestions] = useState<Question[]>([])
+    const [title, setTitle] = useState('')
+    const [questions, setQuestions] = useState<QuestionType[]>([])
 
 
     useEffect(() => {
@@ -126,7 +126,7 @@ export default function Room() {
                     <div className="form-footer">
                         {user ? (
                             <div className="user-info">
-                                <img src={user.avatar} alt={user.name} />
+                                <img src={user.avatar} alt='avatar' />
                                 <span>{user.name}</span>
                             </div>
                         ) : (
@@ -134,11 +134,18 @@ export default function Room() {
                         )
 
                         }
-                        <Button type="submit" disabled={!user}>Enviar Pergunta</Button>
+                        <Button type="submit" disabled={!user} style={!user ? { opacity: 0.4, cursor: 'not-allowed' } : {}} >Enviar Pergunta</Button>
                     </div>
                 </form>
 
-                {/* {JSON.stringify(questions)} */}
+                <div className="question-list">
+                    {questions.map(question => {
+                        return (
+                            <Question key={question.id} content={question.content} author={question.author} />
+                        )
+                    })}
+                </div>
+
             </main>
         </div>
     )
