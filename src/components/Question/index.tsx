@@ -1,17 +1,16 @@
+import { ReactNode } from 'react'
 import '../../styles/question.scss'
-// import { AiOutlineCheckCircle } from 'react-icons/ai'
-// import { FiTrash } from 'react-icons/fi'
-// import { BiMessage } from 'react-icons/bi'
 
 type QuestionProps = {
     content: string
-        author: {
-            avatar: string,
-            name: string
-        }
+    author: {
+        avatar: string,
+        name: string
+    }
+    children?: ReactNode
 }
 
-export default function Question({content,author}: QuestionProps) {
+export default function Question({content,author,children}: QuestionProps) {
     return(
         <div className="question">
             <p>{content}</p>
@@ -20,7 +19,7 @@ export default function Question({content,author}: QuestionProps) {
                     <img src={author.avatar} alt="Avatar" />
                     <span>{author.name}</span>
                 </div>
-                <div></div>
+                <div>{children}</div>
             </footer>
         </div>
     )

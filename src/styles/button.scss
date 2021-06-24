@@ -6,7 +6,15 @@
     cursor: pointer;
     border: 0;
     transition: filter 0.2s;
-    padding: 12px;
+    padding: 8px;
+
+
+    &.outline{
+        background: #FFF;
+        border: 1px solid #835afd;
+        color:#835afd;
+      
+    }
 
     &:not(:disabled):hover{
         filter:brightness(0.9)
