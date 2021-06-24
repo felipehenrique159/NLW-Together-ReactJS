@@ -7,13 +7,12 @@ import { useHistory } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { useState, FormEvent } from 'react'
 import { database } from '../../services/firebase'
-// import { toast } from 'react-toastify'
-import {toast} from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 export default function Home() {
 
     const history = useHistory()
     const { user, signInWithGoogle } = useAuth()
-    const [roomCode,setRoomCode] = useState('')
+    const [roomCode, setRoomCode] = useState('')
 
     async function handleCreateRoom() {
         if (!user) {
@@ -25,21 +24,33 @@ export default function Home() {
         history.push('/rooms/new')
     }
 
-    async function handleJoinRoom(e:FormEvent) {
-      e.preventDefault()
-      if(roomCode.trim() === ''){
-          toast.error('Preencher Código da sala!')
-          return
-      }
-      
-      const result = await database.ref(`rooms/${roomCode}`).get()
+    async function handleJoinRoom(e: FormEvent) {
+        e.preventDefault()
+        if (roomCode.trim() === '') {
+            toast.error('Preencher Código da sala!')
+            return
+        }
 
-      if(!result.exists()){
-          alert('sala nao existe')
-          return
-      }
+       try {
+            const result = await database.ref(`rooms/${roomCode}`).get()
+            if (!result.exists()) {
+                toast.error('Sala não existe!')
+                return
+            }
+    
+            if(result.val().closedAt){
+                toast.error('Sala de perguntas encerrada!')
+                return
+            }
+    
+            history.push(`/rooms/${roomCode}`)
+            toast.success('Você entrou na sala!')
+       } catch (error) {
+           console.log(error);
+           toast.error('Código inválido')
+       }
 
-      history.push(`/rooms/${roomCode}`)
+       
 
     }
 

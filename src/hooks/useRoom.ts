@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useHistory } from "react-router-dom"
 import { database } from "../services/firebase"
 import { useAuth } from "./useAuth"
 
@@ -32,13 +33,19 @@ export function useRoom(roomId:string) {
     const {user} = useAuth()
     const [title, setTitle] = useState('')
     const [questions, setQuestions] = useState<QuestionType[]>([])
+    const history = useHistory()
 
     useEffect(() => {
         async function getQuestions() {
             const roomRef = await database.ref(`rooms/${roomId}`)
+            
             roomRef.on('value', room => {
                
                 const databaseRoom = room.val()
+                if(!databaseRoom){ //caso tente passar na url uma sala não existente, redireciona pra home
+                    history.push('/')
+                    return
+                }
                 const firebaseQuestions: FirebaseQuestion = databaseRoom.questions ?? {}
 
                 const parsedQuestions = Object.entries(firebaseQuestions).map(([key, value]) => {

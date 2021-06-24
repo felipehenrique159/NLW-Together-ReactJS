@@ -2,23 +2,46 @@ import logoImg from '../../assets/images/logo.svg'
 import Button from '../../components/Button'
 import RoomCode from '../../components/RoomCode'
 import '../../styles/room.scss'
-import { useParams } from 'react-router-dom'
-// import { useState } from 'react'
-// import { useAuth } from '../../hooks/useAuth'
+import { useHistory, useParams } from 'react-router-dom'
+import deleteImg from '../../assets/images/delete.svg'
 import Question from '../../components/Question'
 import { useRoom } from '../../hooks/useRoom'
+import { database } from '../../services/firebase'
 
 type RoomParams = {
     id: string
 }
 
-
 export default function AdminRoom() {
-    // const { user } = useAuth()
     const params = useParams<RoomParams>()
     const roomId = params.id
-
+    const history = useHistory()
     const { questions, title } = useRoom(roomId)
+
+    async function handleEndRoom() {
+            try {
+               await database.ref(`rooms/${roomId}`).update({
+                    closedAt : new Date()
+               })
+
+               history.push('/')
+
+            } catch (error) {
+                console.log(error);
+            }
+        
+    }
+
+
+    async function handleDeleteQuestion(questionId: string) {
+        if (window.confirm('Tem certeza que deseja excluir essa pergunta?')) {
+            try {
+                await database.ref(`rooms/${roomId}/questions/${questionId}`).remove()
+            } catch (error) {
+                console.log(error);     
+            }
+        }
+    }
 
     return (
         <div id="page-room">
@@ -27,7 +50,7 @@ export default function AdminRoom() {
                     <img src={logoImg} alt="Letmeask" />
                     <div>
                         <RoomCode code={roomId} />
-                        <Button isOutlined>Encerrar Sala</Button>
+                        <Button isOutlined onClick={handleEndRoom}>Encerrar Sala</Button>
                     </div>
                 </div>
             </header>
@@ -42,7 +65,14 @@ export default function AdminRoom() {
                 <div className="question-list">
                     {questions.map(question => {
                         return (
-                            <Question key={question.id} content={question.content} author={question.author} />
+                            <Question key={question.id} content={question.content} author={question.author}>
+                                <button
+                                    type="button"
+                                    onClick={() => handleDeleteQuestion(question.id)}
+                                >
+                                    <img src={deleteImg} alt="Remover pergunta" />
+                                </button>
+                            </Question>
                         )
                     })}
                 </div>

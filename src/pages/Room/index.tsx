@@ -9,7 +9,7 @@ import { useAuth } from '../../hooks/useAuth'
 import { database } from '../../services/firebase'
 import Question from '../../components/Question'
 import { useRoom } from '../../hooks/useRoom'
-
+import {Link} from 'react-router-dom'
 type RoomParams = {
     id: string
 }
@@ -80,7 +80,9 @@ export default function Room() {
         <div id="page-room">
             <header>
                 <div className="content">
-                    <img src={logoImg} alt="Letmeask" />
+                    <Link to="/">
+                        <img src={logoImg} alt="Letmeask" />
+                    </Link>
                     <RoomCode code={roomId} />
                 </div>
             </header>
