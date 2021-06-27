@@ -13,6 +13,8 @@ import { useAuth } from '../../hooks/useAuth'
 import { FiLogOut } from 'react-icons/fi'
 import { FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import emptyQuestionImg from '../../assets/images/empty-questions.svg'
+
 
 
 type RoomParams = {
@@ -24,7 +26,7 @@ export default function AdminRoom() {
     const roomId = params.id
     const history = useHistory()
     const { questions, title } = useRoom(roomId)
-    const { user,  logout } = useAuth()
+    const { user, logout } = useAuth()
 
     async function logoutGoogle(e: FormEvent) {
         e.preventDefault()
@@ -90,7 +92,11 @@ export default function AdminRoom() {
                     </Link>
 
                     <div>
-                        {user && <Button onClick={logoutGoogle}>Sair <FiLogOut size={15} /> </Button>}
+                        {user && <Button onClick={logoutGoogle}>
+                            <span className="label-sair">
+                                Sair
+                            </span>
+                            <FiLogOut size={15} /> </Button>}
                         <RoomCode code={roomId} />
                         {user && <Button isOutlined onClick={handleEndRoom}>Encerrar Sala</Button>}
                     </div>
@@ -102,6 +108,13 @@ export default function AdminRoom() {
                     <h1>Sala {title}</h1>
                     {questions.length > 0 && <span>{questions.length} pergunta(s)</span>}
                 </div>
+
+                {questions.length === 0 &&
+                    <div className="empty-questions">
+                        <img src={emptyQuestionImg} alt="" />
+                        <label>Ainda não há perguntas por aqui!</label>
+                    </div>
+                }
 
 
                 <div className="question-list">

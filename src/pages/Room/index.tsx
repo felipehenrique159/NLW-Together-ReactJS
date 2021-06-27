@@ -1,4 +1,5 @@
 import logoImg from '../../assets/images/logo.svg'
+import emptyQuestionImg from '../../assets/images/empty-questions.svg'
 import Button from '../../components/Button'
 import RoomCode from '../../components/RoomCode'
 import '../../styles/room.scss'
@@ -11,6 +12,7 @@ import Question from '../../components/Question'
 import { useRoom } from '../../hooks/useRoom'
 import { Link } from 'react-router-dom'
 import { FiLogOut } from 'react-icons/fi'
+
 
 type RoomParams = {
     id: string
@@ -107,7 +109,11 @@ export default function Room() {
                         <img src={logoImg} alt="Letmeask" />
                     </Link>
                     <div>
-                        {user && <Button onClick={logoutGoogle}>Sair <FiLogOut size={15} /> </Button>}
+                        {user && <Button onClick={logoutGoogle}>
+                            <span className="label-sair">
+                                Sair
+                            </span> 
+                            <FiLogOut size={15} /> </Button>}
                         <RoomCode code={roomId} />
                     </div>
                 </div>
@@ -139,6 +145,13 @@ export default function Room() {
                         <Button type="submit" disabled={!user} style={!user ? { opacity: 0.4, cursor: 'not-allowed' } : {}} >Enviar Pergunta</Button>
                     </div>
                 </form>
+
+                {questions.length === 0 && 
+                    <div className="empty-questions">
+                        <img src={emptyQuestionImg} alt="" />
+                        <label>Ainda não há perguntas por aqui!</label>
+                    </div>
+                }
 
                 <div className="question-list">
                     {questions.map(question => {
