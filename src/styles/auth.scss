@@ -11,6 +11,11 @@
         display: flex;
         padding: 120px 80px;
         flex-direction: column;
+
+        
+        @media screen and (max-width: 800px) {
+            display: none;
+        }
         
         img{
             max-width: 320px;

@@ -48,6 +48,9 @@
     main{
         // max-width: 800px;
         max-width: 70%;
+        @media screen and (max-width: 800px) {
+            max-width: 85%;
+        }
         margin: 0 auto;
 
         .room-title{
@@ -148,6 +151,9 @@
             label{
                 margin-top:10px;
                 font-size :22px;
+                @media screen and (max-width: 800px) {
+                    font-size: 17px;
+                }
             }
         }
 
