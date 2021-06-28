@@ -4,7 +4,7 @@
 <img src="https://user-images.githubusercontent.com/43323183/123288189-b6899000-d4e5-11eb-95da-9ddd8fb8b7bb.png">
 
 ## Comandos para rodar a aplicação
-
+- Copiar o arquivo .env.local.example para .env.local e colocar as credenciais do firebase
 - npm install (Para instalar as dependencias do projeto)
 - npm start
 
@@ -16,11 +16,12 @@ Caso queira testar o projeto,deixarei o link:
 
 https://letmeask-app-teste.netlify.app/
 
-## Tecnologias utilizadas:
+## Tecnologias e libs utilizadas:
 
 - ### React JS
 - ### React Router Dom 
 - ### React icons 
+- ### classnames
 - ### React hot toast
 - ### Firebase
 - ### Typescript
